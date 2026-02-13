@@ -439,6 +439,48 @@
                 box-shadow: 0 0 10px #00f7ff, 0 0 20px rgba(0, 247, 255, 0.5);
             }
         }
+
+        /* Desktop: chat always visible, no toggle */
+        @media (min-width: 769px) {
+            .chat-window-wrapper .chat-window {
+                display: flex !important;
+                opacity: 1 !important;
+                transform: scale(1) !important;
+                pointer-events: auto !important;
+            }
+
+            .chat-window-wrapper .chat-window-toggle {
+                display: none !important;
+            }
+
+            .chat-close-button {
+                display: none !important;
+            }
+        }
+
+        /* Mobile: custom toggle bubble with text */
+        @media (max-width: 768px) {
+            .chat-window-wrapper .chat-window-toggle {
+                width: auto !important;
+                height: auto !important;
+                border-radius: 28px !important;
+                padding: 12px 20px !important;
+                gap: 8px;
+                font-family: 'Orbitron', sans-serif;
+                font-size: 0.75rem;
+                font-weight: 700;
+                letter-spacing: 0.05em;
+            }
+
+            .chat-window-toggle .chat-toggle-label {
+                display: inline !important;
+            }
+        }
+
+        /* Hide label by default (JS injects it) */
+        .chat-toggle-label {
+            display: none;
+        }
     </style>
 </head>
 
@@ -764,6 +806,43 @@
                 });
 
                 observer.observe(msgList, { childList: true, subtree: false });
+            }, 500);
+        })();
+
+        // Responsive chat: auto-open on desktop, label bubble on mobile
+        (function () {
+            const isDesktop = window.matchMedia('(min-width: 769px)');
+
+            const waitForToggle = setInterval(() => {
+                const toggle = document.querySelector('.chat-window-toggle');
+                if (!toggle) return;
+                clearInterval(waitForToggle);
+
+                // Add "AI Chat" label to bubble for mobile
+                if (!toggle.querySelector('.chat-toggle-label')) {
+                    const label = document.createElement('span');
+                    label.className = 'chat-toggle-label';
+                    label.textContent = 'AI Chat';
+                    toggle.appendChild(label);
+                }
+
+                // Auto-open on desktop
+                if (isDesktop.matches) {
+                    const chatWindow = document.querySelector('.chat-window');
+                    if (chatWindow && chatWindow.offsetParent === null) {
+                        toggle.click();
+                    }
+                }
+
+                // Re-open if somehow closed on desktop
+                isDesktop.addEventListener('change', (e) => {
+                    if (e.matches) {
+                        const chatWindow = document.querySelector('.chat-window');
+                        if (chatWindow && chatWindow.offsetParent === null) {
+                            toggle.click();
+                        }
+                    }
+                });
             }, 500);
         })();
     </script>
