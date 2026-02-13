@@ -440,13 +440,16 @@
             }
         }
 
-        /* Desktop: chat always visible, no toggle */
+        /* Desktop: chat always visible, taller, no toggle */
         @media (min-width: 769px) {
             .chat-window-wrapper .chat-window {
                 display: flex !important;
                 opacity: 1 !important;
                 transform: scale(1) !important;
                 pointer-events: auto !important;
+                height: 85vh !important;
+                max-height: 85vh !important;
+                width: 340px !important;
             }
 
             .chat-window-wrapper .chat-window-toggle {
@@ -458,8 +461,15 @@
             }
         }
 
-        /* Mobile: custom toggle bubble with text */
+        /* Mobile: compact chat window + custom toggle */
         @media (max-width: 768px) {
+            .chat-window-wrapper .chat-window {
+                height: 55vh !important;
+                max-height: 55vh !important;
+                width: 90vw !important;
+                max-width: 360px !important;
+            }
+
             .chat-window-wrapper .chat-window-toggle {
                 width: auto !important;
                 height: auto !important;
@@ -474,6 +484,19 @@
 
             .chat-window-toggle .chat-toggle-label {
                 display: inline !important;
+            }
+
+            /* Compact header on mobile */
+            .chat-header {
+                padding: 10px 14px !important;
+            }
+
+            .chat-header .chat-title {
+                font-size: 1rem !important;
+            }
+
+            .chat-header .chat-subtitle {
+                font-size: 0.7rem !important;
             }
         }
 
